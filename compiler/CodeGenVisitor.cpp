@@ -20,7 +20,7 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx)
         if (dynamic_cast<ifccParser::Return_stmtContext*>(ctx->stmt(i)) != nullptr) {
             hasReturn = true;
         }
-        this->visit(ctx->stmt(i));
+        //this->visit(ctx->stmt(i));
     }
 
     // Si aucun `return` n'a été trouvé, on ajoute `return 0;`
