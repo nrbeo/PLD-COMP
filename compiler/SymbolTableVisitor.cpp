@@ -10,7 +10,6 @@ antlrcpp::Any SymbolTableVisitor::visitDeclaration(ifccParser::DeclarationContex
 
     symbolTable[varName] = stackOffset;
     stackOffset -= 4;  // Réserver 4 octets pour la variable
-
     std::cout << "# Déclaration : " << varName << " -> " << symbolTable[varName] << " (%rbp)" << std::endl;
 
     return 0;
