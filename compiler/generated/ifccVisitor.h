@@ -1,5 +1,5 @@
 
-// Generated from ifcc.g4 by ANTLR 4.9.2
+// Generated from ifcc.g4 by ANTLR 4.13.2
 
 #pragma once
 
@@ -19,27 +19,27 @@ public:
   /**
    * Visit parse trees produced by ifccParser.
    */
-    virtual antlrcpp::Any visitAxiom(ifccParser::AxiomContext *context) = 0;
+    virtual std::any visitAxiom(ifccParser::AxiomContext *context) = 0;
 
-    virtual antlrcpp::Any visitProg(ifccParser::ProgContext *context) = 0;
+    virtual std::any visitProg(ifccParser::ProgContext *context) = 0;
 
-    virtual antlrcpp::Any visitStmt(ifccParser::StmtContext *context) = 0;
+    virtual std::any visitStmt(ifccParser::StmtContext *context) = 0;
 
-    virtual antlrcpp::Any visitDeclaration(ifccParser::DeclarationContext *context) = 0;
+    virtual std::any visitDeclaration(ifccParser::DeclarationContext *context) = 0;
 
-    virtual antlrcpp::Any visitAssignment(ifccParser::AssignmentContext *context) = 0;
+    virtual std::any visitAssignment(ifccParser::AssignmentContext *context) = 0;
 
-    virtual antlrcpp::Any visitReturn_stmt(ifccParser::Return_stmtContext *context) = 0;
+    virtual std::any visitReturn_stmt(ifccParser::Return_stmtContext *context) = 0;
 
-    virtual antlrcpp::Any visitConstExpr(ifccParser::ConstExprContext *context) = 0;
+    virtual std::any visitConstExpr(ifccParser::ConstExprContext *context) = 0;
 
-    virtual antlrcpp::Any visitMulDiv(ifccParser::MulDivContext *context) = 0;
+    virtual std::any visitMulDiv(ifccParser::MulDivContext *context) = 0;
 
-    virtual antlrcpp::Any visitAddSub(ifccParser::AddSubContext *context) = 0;
+    virtual std::any visitAddSub(ifccParser::AddSubContext *context) = 0;
 
-    virtual antlrcpp::Any visitParenthesized(ifccParser::ParenthesizedContext *context) = 0;
+    virtual std::any visitParenthesized(ifccParser::ParenthesizedContext *context) = 0;
 
-    virtual antlrcpp::Any visitVarExpr(ifccParser::VarExprContext *context) = 0;
+    virtual std::any visitVarExpr(ifccParser::VarExprContext *context) = 0;
 
 
 };

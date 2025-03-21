@@ -1,5 +1,5 @@
 
-// Generated from ifcc.g4 by ANTLR 4.9.2
+// Generated from ifcc.g4 by ANTLR 4.13.2
 
 #pragma once
 
@@ -15,47 +15,47 @@
 class  ifccBaseVisitor : public ifccVisitor {
 public:
 
-  virtual antlrcpp::Any visitAxiom(ifccParser::AxiomContext *ctx) override {
+  virtual std::any visitAxiom(ifccParser::AxiomContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitProg(ifccParser::ProgContext *ctx) override {
+  virtual std::any visitProg(ifccParser::ProgContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitStmt(ifccParser::StmtContext *ctx) override {
+  virtual std::any visitStmt(ifccParser::StmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitDeclaration(ifccParser::DeclarationContext *ctx) override {
+  virtual std::any visitDeclaration(ifccParser::DeclarationContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAssignment(ifccParser::AssignmentContext *ctx) override {
+  virtual std::any visitAssignment(ifccParser::AssignmentContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitReturn_stmt(ifccParser::Return_stmtContext *ctx) override {
+  virtual std::any visitReturn_stmt(ifccParser::Return_stmtContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitConstExpr(ifccParser::ConstExprContext *ctx) override {
+  virtual std::any visitConstExpr(ifccParser::ConstExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMulDiv(ifccParser::MulDivContext *ctx) override {
+  virtual std::any visitMulDiv(ifccParser::MulDivContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAddSub(ifccParser::AddSubContext *ctx) override {
+  virtual std::any visitAddSub(ifccParser::AddSubContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitParenthesized(ifccParser::ParenthesizedContext *ctx) override {
+  virtual std::any visitParenthesized(ifccParser::ParenthesizedContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitVarExpr(ifccParser::VarExprContext *ctx) override {
+  virtual std::any visitVarExpr(ifccParser::VarExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
