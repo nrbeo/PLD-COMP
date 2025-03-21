@@ -47,7 +47,13 @@ antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *c
 
         if (auto constExpr = dynamic_cast<ifccParser::ConstExprContext*>(ctx->expr())) {
             int value = std::stoi(constExpr->getText());
-            std::cout << "    movl $" << value << ", " << offset << "(%rbp)   # Init " << varName << "\n";
+            std::cout << "    movl $" << value << ", " << offset << "(%rbp)   # Assign " << value << " to " << varName << "\n";
+        } 
+        else if (auto varExpr = dynamic_cast<ifccParser::VarExprContext*>(ctx->expr())) {
+            std::string varNameSrc = varExpr->getText();
+            int offsetSrc = (*symbolTable)[varNameSrc];
+            std::cout << "    movl " << offsetSrc << "(%rbp), %eax   # Load " << varNameSrc << " into %eax\n";
+            std::cout << "    movl %eax, " << offset << "(%rbp)   # Store in " << varName << "\n";
         }
     }
     return 0;

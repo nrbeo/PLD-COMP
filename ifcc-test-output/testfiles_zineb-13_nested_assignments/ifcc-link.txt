@@ -1,4 +1,0 @@
-arch: invalid option -- 'x'
-Try 'arch --help' for more information.
-
-exit status: 1

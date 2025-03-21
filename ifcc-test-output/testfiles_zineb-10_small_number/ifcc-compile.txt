@@ -1,4 +1,0 @@
-line 2:11 extraneous input '-' expecting {'(', VAR, CONST}
-error: syntax error during parsing
-
-exit status: 1
