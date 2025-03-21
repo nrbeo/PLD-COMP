@@ -5,7 +5,9 @@
     movq %rsp, %rbp
     movl $0, %eax   # Ajout d'un return 0 implicite
     movl $42, %eax   # Charger la constante 42 dans %eax
-    movl %eax, -4(%rbp)   # # Initialisation de a
+    movq %rax, -4(%rbp)   # Initialisation de a
     movl -4(%rbp), %eax   # Charger a dans %eax
+    leave
+    ret
     popq %rbp
     ret

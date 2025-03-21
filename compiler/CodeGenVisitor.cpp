@@ -38,29 +38,24 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx)
     return 0;
 }
 
-antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx)
-{   
+antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx) {   
     std::string varName = ctx->VAR()->getText();  // Récupérer le nom de la variable
     int offset = (*symbolTable)[varName]; 
     if (ctx->expr()) {
         visit(ctx->expr());
-        std::cout << "    movl %eax, " << offset << "(%rbp)   # # Initialisation de " << varName << "\n"; 
-        }         
-    
+        std::cout << "    movq %rax, " << offset << "(%rbp)   # Initialisation de " << varName << "\n"; 
+    }         
     return 0;
 }
 
 antlrcpp::Any CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx) {
     std::string varName = ctx->VAR()->getText();  // Récupérer le nom de la variable assignée
-
     int offset = (*symbolTable)[varName];  // On suppose que `symbolTable` est déjà valide. On récupére l'offset
     
     visit(ctx->expr());  // Visiter l'expression à droite de l'opérateur d'assignation
-    std::cout << "    movl %eax, " << offset << "(%rbp)   # Copier la valeur dans " << varName << "\n";  
+    std::cout << "    movq %rax, " << offset << "(%rbp)   # Copier la valeur dans " << varName << "\n";  
     return 0;
 }
-
-
 
 antlrcpp::Any CodeGenVisitor::visitVarExpr(ifccParser::VarExprContext *ctx) {
     std::string varName = ctx->VAR()->getText();
@@ -76,4 +71,25 @@ antlrcpp::Any CodeGenVisitor::visitConstExpr(ifccParser::ConstExprContext *ctx) 
     return 0;
 }
 
+antlrcpp::Any CodeGenVisitor::visitReturn_stmt(ifccParser::Return_stmtContext *ctx) {
+    visit(ctx->expr());  // Visiter l'expression à retourner
+    std::cout << "    leave\n";  // Equivalent à `movq %rbp, %rsp` suivi de `popq %rbp`
+    std::cout << "    ret\n";    // Retourner la valeur dans %eax
+    return 0;
+}
+
+antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
+    visit(ctx->expr(0));  // Visit the left operand
+    std::cout << "    pushq %rax\n";  // Save the value of the left operand
+    visit(ctx->expr(1));  // Visit the right operand
+    std::cout << "    movq %rax, %rbx\n";  // Save the value of the right operand
+    std::cout << "    popq %rax\n";  // Restore the value of the left operand
+
+    if (ctx->OP->getText() == "+") {
+        std::cout << "    addq %rbx, %rax\n";  // Add the two operands
+    } else {
+        std::cout << "    subq %rbx, %rax\n";  // Subtract the two operands
+    }
+    return 0;
+}
 
