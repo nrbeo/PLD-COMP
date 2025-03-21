@@ -1,0 +1,23 @@
+line 1:0 token recognition error at: '//'
+line 2:0 token recognition error at: '//'
+line 2:14 token recognition error at: '"'
+line 2:20 token recognition error at: '"'
+line 2:24 token recognition error at: '//'
+line 2:34 token recognition error at: ':'
+line 2:44 token recognition error at: '''
+line 2:52 token recognition error at: 'î'
+line 2:65 token recognition error at: '''
+line 3:0 token recognition error at: '//'
+line 2:36 mismatched input 'return' expecting '='
+line 2:45 missing ';' at 'une'
+line 2:49 missing '=' at 'cha'
+line 2:53 missing ';' at 'ne'
+line 2:56 missing '=' at 'au'
+line 2:59 missing ';' at 'lieu'
+line 2:64 missing '=' at 'd'
+line 2:66 missing ';' at 'un'
+line 2:69 missing '=' at 'entier'
+line 3:3 missing ';' at '}'
+error: syntax error during parsing
+
+exit status: 1
