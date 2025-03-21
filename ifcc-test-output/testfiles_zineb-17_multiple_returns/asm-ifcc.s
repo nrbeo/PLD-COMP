@@ -1,5 +1,5 @@
-.globl _main
- _main: 
+.globl main
+ main: 
     pushq %rbp
     movq %rsp, %rbp
     movl $5, %eax   # Load constant 5 into %eax

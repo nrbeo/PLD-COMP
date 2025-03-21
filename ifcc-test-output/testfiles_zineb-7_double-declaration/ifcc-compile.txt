@@ -1,3 +1,0 @@
-Erreur : Variable 'b' déjà déclarée !
-
-exit status: 1

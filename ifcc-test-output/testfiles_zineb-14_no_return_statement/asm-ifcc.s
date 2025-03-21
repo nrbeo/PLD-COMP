@@ -1,6 +1,6 @@
 # Déclaration : x -> -4 (%rbp)
-.globl _main
- _main: 
+.globl main
+ main: 
     pushq %rbp
     movq %rsp, %rbp
     movl $10, -4(%rbp)   # Assign 10 to x

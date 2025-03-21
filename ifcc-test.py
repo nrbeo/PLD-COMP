@@ -271,10 +271,10 @@ for jobname in jobs:
     os.chdir(jobname)
     
     ## Reference compiler = GCC
-    gccstatus=run_command("arch -x86_64 gcc -S -o asm-gcc.s input.c", "gcc-compile.txt")
+    gccstatus=run_command("gcc -S -o asm-gcc.s input.c", "gcc-compile.txt")
     if gccstatus == 0:
         # test-case is a valid program. we should run it
-        gccstatus=run_command("arch -x86_64 gcc -o exe-gcc asm-gcc.s", "gcc-link.txt")
+        gccstatus=run_command("gcc -o exe-gcc asm-gcc.s", "gcc-link.txt")
     if gccstatus == 0: # then both compile and link stage went well
         exegccstatus=run_command("./exe-gcc", "gcc-execute.txt")
         if args.verbose >=2:

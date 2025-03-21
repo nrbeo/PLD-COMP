@@ -2,10 +2,10 @@
 # Each student should have a config.mk corresponding to her system.
 # Examples are  ubuntu.mk, DI.mk, fedora.mk
 # Then config.mk should be in the .gitignore of your project
-include config-IF501.mk
+include config.mk
 
 CC=g++
-CCFLAGS=-g -c -std=c++11 -I$(ANTLRINC) -Wno-attributes # -Wno-defaulted-function-deleted -Wno-unknown-warning-option
+CCFLAGS=-g -c -std=c++17 -I$(ANTLRINC) -Wno-attributes # -Wno-defaulted-function-deleted -Wno-unknown-warning-option
 LDFLAGS=-g
 
 default: all
@@ -19,7 +19,7 @@ OBJECTS=build/ifccBaseVisitor.o \
 	build/ifccParser.o \
 	build/main.o \
 	build/CodeGenVisitor.o \
-	build/SymbolTableVisitor.o \
+	build/SymbolTableVisitor.o
 
 ifcc: $(OBJECTS)
 	@mkdir -p build

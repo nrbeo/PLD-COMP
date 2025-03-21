@@ -1,9 +1,0 @@
-input.c:2:5: error: use of undeclared identifier 'a'
-    2 |     a = 10;
-      |     ^
-input.c:3:12: error: use of undeclared identifier 'a'
-    3 |     return a;
-      |            ^
-2 errors generated.
-
-exit status: 1

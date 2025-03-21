@@ -1,8 +1,8 @@
 # Déclaration : a -> -4 (%rbp)
 # Déclaration : b -> -8 (%rbp)
 # Déclaration : c -> -12 (%rbp)
-.globl _main
- _main: 
+.globl main
+ main: 
     pushq %rbp
     movq %rsp, %rbp
     movl $5, -4(%rbp)   # Assign 5 to a

@@ -1,9 +1,0 @@
-input.c:3:9: error: redefinition of 'b'
-    3 |     int b; 
-      |         ^
-input.c:2:9: note: previous definition is here
-    2 |     int b;
-      |         ^
-1 error generated.
-
-exit status: 1
