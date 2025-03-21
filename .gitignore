@@ -1,1 +1,9 @@
 /.vscode
+Makefile
+config-IF501.mk
+config-wsl-2025.mk
+config.mk
+build/
+antlr/
+ifcc-test.py
+*.o

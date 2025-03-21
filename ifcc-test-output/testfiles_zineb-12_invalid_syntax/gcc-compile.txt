@@ -1,0 +1,13 @@
+input.c:3:6: error: expected ';' after expression
+    3 |     a 10;  // ❌ Erreur : Il manque un `=`
+      |      ^
+      |      ;
+input.c:3:5: warning: expression result unused [-Wunused-value]
+    3 |     a 10;  // ❌ Erreur : Il manque un `=`
+      |     ^
+input.c:3:7: warning: expression result unused [-Wunused-value]
+    3 |     a 10;  // ❌ Erreur : Il manque un `=`
+      |       ^~
+2 warnings and 1 error generated.
+
+exit status: 1

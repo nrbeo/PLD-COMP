@@ -15,25 +15,28 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx)
     std::cout << "    pushq %rbp\n";        
     std::cout << "    movq %rsp, %rbp\n";   
 
-    // Visite des instructions enfants
     bool hasReturn = false;
     for (auto stmt : ctx->stmt()) {
-        if (dynamic_cast<ifccParser::Return_stmtContext*>(stmt) != nullptr) {
+        if (stmt->return_stmt() != nullptr) {
             hasReturn = true;
+            break;
         }
+    }
+
+    for (auto stmt : ctx->stmt()) {
         this->visit(stmt);
     }
 
     // Ajout de `return 0;` implicite si nécessaire
     if (!hasReturn) {
         std::cout << "    movl $0, %eax   # return 0 implicite\n";
+        std::cout << "    popq %rbp\n";
+        std::cout << "    ret\n";
     }
 
-    // Epilogue
-    std::cout << "    popq %rbp\n";         
-    std::cout << "    ret\n";               
     return 0;
 }
+
 
 // Gérer les déclarations (ex: int a = 42;)
 antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx)
@@ -73,9 +76,13 @@ antlrcpp::Any CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx
 // Gérer les `return`
 antlrcpp::Any CodeGenVisitor::visitReturn_stmt(ifccParser::Return_stmtContext *ctx)
 {
-    visit(ctx->expr());  // Charge l'expression retournée dans %eax
+    visit(ctx->expr());  // Charge la valeur dans %eax
+    std::cout << "    popq %rbp\n";
+    std::cout << "    ret\n";               // Fin immédiate du main
     return 0;
 }
+
+
 
 // Visite d'un entier constant
 antlrcpp::Any CodeGenVisitor::visitConstExpr(ifccParser::ConstExprContext *ctx) {
@@ -94,30 +101,32 @@ antlrcpp::Any CodeGenVisitor::visitVarExpr(ifccParser::VarExprContext *ctx) {
 
 // Optimisation des expressions arithmétiques
 antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
-    visit(ctx->expr(0));  
-    std::cout << "    pushq %rax\n";  
-    visit(ctx->expr(1));  
-    std::cout << "    popq %rcx\n";  
+    visit(ctx->expr(1));  // right operand
+    std::cout << "    movl %eax, %ebx\n";  // save right operand
 
+    visit(ctx->expr(0));  // left operand is now in %eax
     if (ctx->getText().find("+") != std::string::npos) {
-        std::cout << "    addl %ecx, %eax   # Addition\n";
+        std::cout << "    addl %ebx, %eax   # Addition\n";
     } else if (ctx->getText().find("-") != std::string::npos) {
-        std::cout << "    subl %ecx, %eax   # Soustraction\n";
+        std::cout << "    subl %ebx, %eax   # Soustraction\n";
     }
     return 0;
 }
 
+
 antlrcpp::Any CodeGenVisitor::visitMulDiv(ifccParser::MulDivContext *ctx) {
-    visit(ctx->expr(0));  
-    std::cout << "    pushq %rax\n";  
-    visit(ctx->expr(1));  
-    std::cout << "    popq %rcx\n";  
+    visit(ctx->expr(0));  // left
+    std::cout << "    movl %eax, %ebx\n";
+    visit(ctx->expr(1));  // right
 
     if (ctx->getText().find("*") != std::string::npos) {
-        std::cout << "    imull %ecx, %eax  # Multiplication\n";
+        std::cout << "    imull %eax, %ebx\n";
+        std::cout << "    movl %ebx, %eax\n";
     } else if (ctx->getText().find("/") != std::string::npos) {
-        std::cout << "    cltd\n";  
-        std::cout << "    idivl %ecx        # Division\n";
+        std::cout << "    movl %eax, %ecx\n";  // divisor
+        std::cout << "    movl %ebx, %eax\n";  // dividend
+        std::cout << "    cltd\n";
+        std::cout << "    idivl %ecx\n";
     }
     return 0;
 }
