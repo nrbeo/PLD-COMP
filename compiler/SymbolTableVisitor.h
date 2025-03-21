@@ -17,7 +17,7 @@ private:
 public:
     virtual antlrcpp::Any visitDeclaration(ifccParser::DeclarationContext *ctx) override;
     virtual antlrcpp::Any visitAssignment(ifccParser::AssignmentContext *ctx) override;
-    virtual antlrcpp::Any visitReturn_stmt(ifccParser::Return_stmtContext *ctx) override;
+    // virtual antlrcpp::Any visitReturn_stmt(ifccParser::Return_stmtContext *ctx) override;
     void checkUnusedVariables();  // Vérifie si une variable a été déclarée mais jamais utilisée
     std::map<std::string, int>* getSymbolTable() { return &symbolTable; } // Retourne la table des symboles
 };
