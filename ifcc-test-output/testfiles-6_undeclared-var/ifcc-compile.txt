@@ -1,3 +1,0 @@
-Erreur : Variable 'a' utilisée sans être déclarée !
-
-exit status: 1

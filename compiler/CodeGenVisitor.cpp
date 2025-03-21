@@ -13,20 +13,7 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx)
     // Prologue
     std::cout << "    pushq %rbp\n";        // save %rbp on the stack
     std::cout << "    movq %rsp, %rbp\n";   // define %rbp for the current function
-
-    // Visite des instructions enfants
-    bool hasReturn = false;  // Vérifie si un `return` existe
-    for (size_t i = 0; i < ctx->stmt().size(); i++) {
-        if (dynamic_cast<ifccParser::Return_stmtContext*>(ctx->stmt(i)) != nullptr) {
-            hasReturn = true;
-        }
-    }
-
-    // Si aucun `return` n'a été trouvé, on ajoute `return 0;`
-    if (!hasReturn) {
-        std::cout << "    movl $0, %eax   # Ajout d'un return 0 implicite\n";
-    }
-
+   
     for (auto stmt : ctx->stmt()) {  // iterate over each statement in the list
         this->visit(stmt);  // visit each statement (declaration, assignment, return)
     }
@@ -44,7 +31,7 @@ antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *c
     int offset = (*symbolTable)[varName]; 
     if (ctx->expr()) {
         visit(ctx->expr());
-        std::cout << "    movl %eax, " << offset << "(%rbp)   # # Initialisation de " << varName << "\n"; 
+        std::cout << "    movl %eax, " << offset << "(%rbp)   # Initialisation de " << varName << "\n"; 
         }         
     
     return 0;
@@ -60,7 +47,12 @@ antlrcpp::Any CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx
     return 0;
 }
 
-
+antlrcpp::Any CodeGenVisitor::visitReturn_stmt(ifccParser::Return_stmtContext *ctx) {
+    visit(ctx->expr());
+    std::cout << "    leave\n";  // Equivalent à `movq %rbp, %rsp` suivi de `popq %rbp`
+    std::cout << "    ret\n";    // Retourner à l'appelant     
+    return 0;
+}
 
 antlrcpp::Any CodeGenVisitor::visitVarExpr(ifccParser::VarExprContext *ctx) {
     std::string varName = ctx->VAR()->getText();
@@ -76,4 +68,57 @@ antlrcpp::Any CodeGenVisitor::visitConstExpr(ifccParser::ConstExprContext *ctx) 
     return 0;
 }
 
+antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
+    // 1. Visiter la partie gauche → %eax
+    visit(ctx->expr(0)); 
+
+    // 2. Allouer espace mémoire teporaire
+    tempVarOffset -= 4;    
+    std::cout << "    # "  << tempVarOffset << " pour "  << ctx->expr(0)->getText()  << "\n";
+    // 3. Stocker le résultat gauche dans temp
+    std::cout << "    movl %eax, " << tempVarOffset << "(%rbp)   # Sauvegarde de la partie gauche\n";
+
+    int offset_of_lhs = tempVarOffset;
+
+    // 4. Visiter la droite → résultat dans %eax
+    visit(ctx->expr(1));  // résultat de droite dans eax
+   
+    // 5. Effectuer l'opération : eax = gauche (tmp) op droite (eax)
+    std::string op = ctx->OP->getText();
+    if (op == "+") {
+        std::cout << "    addl " <<offset_of_lhs << "(%rbp), %eax   # tmp + eax → eax\n";
+    } else { 
+        std::cout << "    subl %eax,"<< offset_of_lhs << "(%rbp) ";
+        std::cout << "    movl "<< offset_of_lhs << "(%rbp), %eax   # Résultat dans eax\n";
+    }
+    return 0;
+}
+
+
+antlrcpp::Any CodeGenVisitor::visitMulDiv(ifccParser::MulDivContext *ctx) {
+    // 1. Visiter la partie gauche → résultat dans %eax
+    visit(ctx->expr(0));
+
+    // 2. Allouer une case mémoire pour temporaire
+    tempVarOffset -= 4;
+
+    std::cout << "    # "  << tempVarOffset << " pour "  << ctx->expr(0)->getText()  << "\n";
+   
+    // 3. Stocker le résultat gauche dans temp
+    std::cout << "    movl %eax, " << tempVarOffset << "(%rbp)   # Sauvegarde de la partie gauche\n";
+
+    // 4. Visiter la partie droite → résultat dans %eax
+    visit(ctx->expr(1));
+            
+    // 7. Effectuer l’opération
+    std::string op = ctx->OP->getText();
+    if (op == "*") {
+        std::cout << "    imull " << tempVarOffset << "(%rbp), %eax   # Multiplication : eax = gauche * droite\n";
+    } else {
+        // Division : eax = gauche / droite
+        std::cout << "    cltd                           # Étendre eax dans edx:eax\n";
+        std::cout << "    idivl " << tempVarOffset << "(%rbp)     # Division signée eax / droite\n";
+    }
+    return 0;
+}
 
