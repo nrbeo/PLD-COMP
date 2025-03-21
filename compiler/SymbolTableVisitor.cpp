@@ -28,9 +28,10 @@ antlrcpp::Any SymbolTableVisitor::visitAssignment(ifccParser::AssignmentContext 
     return 0;
 }
 
+// Correction de visitReturn_stmt
 antlrcpp::Any SymbolTableVisitor::visitReturn_stmt(ifccParser::Return_stmtContext *ctx) {
-    if (ctx->expr()->VAR()) {  // check if the return expression is a variable
-        std::string varName = ctx->expr()->VAR()->getText();        
+    if (auto varExpr = dynamic_cast<ifccParser::VarExprContext*>(ctx->expr())) {  
+        std::string varName = varExpr->getText();        
         if (symbolTable.find(varName) == symbolTable.end()) {
             std::cerr << "Erreur : Variable '" << varName << "' utilisée sans être déclarée !" << std::endl;
             exit(1);
@@ -40,8 +41,10 @@ antlrcpp::Any SymbolTableVisitor::visitReturn_stmt(ifccParser::Return_stmtContex
     return 0;   
 }
 
+// Vérification des variables non utilisées
 void SymbolTableVisitor::checkUnusedVariables() {
-    for (const auto& [varName, _] : symbolTable) {
+    for (const auto& pair : symbolTable) {
+        const std::string& varName = pair.first;
         if (usedVariables.find(varName) == usedVariables.end()) {
             std::cerr << "# Avertissement : Variable '" << varName << "' déclarée mais jamais utilisée !" << std::endl;
         }
