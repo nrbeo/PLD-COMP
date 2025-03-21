@@ -1,0 +1,4 @@
+asm-ifcc.s: Assembler messages:
+asm-ifcc.s:15: Error: junk `(%rbp)movl -16' after expression
+
+exit status: 1

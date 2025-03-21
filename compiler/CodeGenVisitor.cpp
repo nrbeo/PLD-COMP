@@ -122,3 +122,6 @@ antlrcpp::Any CodeGenVisitor::visitMulDiv(ifccParser::MulDivContext *ctx) {
     return 0;
 }
 
+antlrcpp::Any CodeGenVisitor::visitParExpr(ifccParser::ParExprContext *ctx) {
+    return visit(ctx->expr()); // Récupère directement l'expression interne
+}

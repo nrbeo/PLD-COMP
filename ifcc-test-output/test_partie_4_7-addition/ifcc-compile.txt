@@ -1,0 +1,3 @@
+# Avertissement : Variable 'b' déclarée mais jamais utilisée !
+
+exit status: 0
