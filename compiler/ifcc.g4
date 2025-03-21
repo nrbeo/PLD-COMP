@@ -13,7 +13,11 @@ return_stmt: RETURN expr ';' ;
 
 RETURN : 'return' ;
 
-expr:VAR
+expr: expr ('+' | '-') expr #Multdiv
+    | expr ('*' | '/') expr #Addsub
+    | '-' expr #unmin
+    | '(' expr ')' #par
+    | VAR
     | CONST ;
 
 VAR: [a-zA-Z_][a-zA-Z_0-9]* ;
